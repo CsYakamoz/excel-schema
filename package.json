@@ -1,0 +1,34 @@
+{
+  "name": "excel-schema",
+  "version": "0.1.0",
+  "description": "read excel in a lazy way",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CsYakamoz/excel-schema.git"
+  },
+  "author": "CsYakamoz",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "mocha": "^6.1.4"
+  },
+  "dependencies": {
+    "ramda": "^0.26.1",
+    "xlsx": "^0.14.3"
+  },
+  "bugs": {
+    "url": "https://github.com/CsYakamoz/excel-schema/issues"
+  },
+  "homepage": "https://github.com/CsYakamoz/excel-schema#readme",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "excel",
+    "schema"
+  ]
+}

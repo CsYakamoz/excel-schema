@@ -5,9 +5,9 @@ Read excel in a lazy way.
 ## Installation
 
 ```bash
-npm install excel-schema
+npm install @csyakamoz/excel-schema
 # or
-yarn add excel-schema
+yarn add @csyakamoz/excel-schema
 ```
 
 ## Usage
@@ -16,7 +16,7 @@ yarn add excel-schema
 const {
   Schema: { array, date, boolean, custom, number, string },
   Executor,
-} = require('excel-schema');
+} = require('@csyakamoz/excel-schema');
 
 const data = Executor(
   // excel file

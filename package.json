@@ -1,5 +1,5 @@
 {
-  "name": "excel-schema",
+  "name": "@csyakamoz/excel-schema",
   "version": "0.1.0",
   "description": "read excel in a lazy way",
   "main": "index.js",

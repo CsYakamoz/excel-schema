@@ -1,22 +1,13 @@
 const R = require('ramda');
 const assert = require('assert');
-const Utils = require('../../utils');
 
-const BaseSchema = require('../../schema/base');
-
-/**
- * @param {object} sheetData
- * @param {BaseSchema} schema
- * @returns {any}
- */
 module.exports = function convertData(sheetData, schema) {
     assert(
         schema._point !== undefined,
         'could not call executor without calling point method'
     );
 
-    const point = Utils.parsePoint(schema._point);
-    const rawValue = sheetData[point.row][point.col];
+    const rawValue = sheetData[schema._point].v;
 
     return R.compose(
         wrapper(schema._after, rawValue, schema._point),
@@ -31,9 +22,9 @@ module.exports = function convertData(sheetData, schema) {
  * @returns {Function}
  */
 function wrapper(func, ...args) {
-    if (func) {
+    if (!R.isNil(func)) {
         return R.partialRight(func, args);
     } else {
-        return Utils.noOperation;
+        return R.identity;
     }
 }

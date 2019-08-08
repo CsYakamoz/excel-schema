@@ -1,4 +1,4 @@
-const R = require('ramda');
+/* eslint-disable no-unused-vars */
 const path = require('path');
 const {
     Schema: { array, date, boolean, custom, number, string },
@@ -7,9 +7,16 @@ const {
 
 const file = path.join(__dirname, 'demo.xlsx');
 
+const showMsg = false;
+const output = data => {
+    if (showMsg) {
+        console.log(JSON.stringify(data, null, 4));
+    }
+};
+
 describe('excel-schema', () => {
     it('single', () => {
-        Executor(
+        const data = Executor(
             file,
             {
                 no: number().point('A2'),
@@ -23,10 +30,84 @@ describe('excel-schema', () => {
             },
             { sheet: 'Sheet1' }
         );
+        output(data);
+    });
+
+    it('before', () => {
+        const data = Executor(
+            file,
+            {
+                no: number()
+                    .before(x => x - 1)
+                    .point('A2'),
+                firstName: string()
+                    .before(x => x.toLowerCase())
+                    .point('B2'),
+                lastName: string()
+                    .before(x => x.toUpperCase())
+                    .point('C2'),
+                gender: string().point('D2'),
+                country: string()
+                    .before(x => x + ' in Earth')
+                    .point('E2'),
+                age: number()
+                    .before(x => x * 2)
+                    .point('F2'),
+                date: date()
+                    .before(x => x + 1)
+                    .point('G2'),
+                id: string()
+                    .before(x => x * 100)
+                    .point('H2'),
+            },
+            { sheet: 'Sheet1' }
+        );
+        output(data);
+    });
+
+    it('after', () => {
+        const data = Executor(
+            file,
+            {
+                no: number()
+                    .after(x => x + 10)
+                    .point('A2'),
+                firstName: string()
+                    .after(x => x.toUpperCase())
+                    .point('B2'),
+                lastName: string()
+                    .after(x => x.toLowerCase())
+                    .point('C2'),
+                gender: string()
+                    .after(x => (x === 'Male' ? 'm' : 'f'))
+                    .point('D2'),
+                country: string()
+                    .after(x => 'beautiful ' + x)
+                    .point('E2'),
+                age: number()
+                    .after(x => x * 3)
+                    .point('F2'),
+                date: date()
+                    .after(
+                        x =>
+                            x.getFullYear() +
+                            '-' +
+                            (x.getMonth() + 1) +
+                            '-' +
+                            x.getDate()
+                    )
+                    .point('G2'),
+                id: string()
+                    .after(x => x / 100)
+                    .point('H2'),
+            },
+            { sheet: 'Sheet1' }
+        );
+        output(data);
     });
 
     it('array', () => {
-        Executor(
+        const data = Executor(
             file,
             array()
                 .range('A2', 'H10')
@@ -43,10 +124,11 @@ describe('excel-schema', () => {
                 }),
             { sheet: 0 }
         );
+        output(data);
     });
 
     it('array in array', () => {
-        Executor(
+        const data = Executor(
             file,
             array()
                 .range('A2', 'E10')
@@ -61,6 +143,7 @@ describe('excel-schema', () => {
                 }),
             { sheet: 'Sheet2' }
         );
+        output(data);
     });
 
     it('custom schema', () => {
@@ -83,7 +166,7 @@ describe('excel-schema', () => {
             ];
         });
 
-        Executor(
+        const data = Executor(
             file,
             array()
                 .range('A2', 'B5')
@@ -94,5 +177,57 @@ describe('excel-schema', () => {
                 }),
             { sheet: 2 }
         );
+        output(data);
+    });
+
+    it('array in array with multiple line', () => {
+        const data = Executor(
+            file,
+            array()
+                .range('A1', 'F6')
+                .interval(2, 2)
+                .item(
+                    array()
+                        .range('A1', 'B2')
+                        .item(string().point('A1'))
+                ),
+            { sheet: 'Sheet4' }
+        );
+        output(data);
+    });
+
+    it('array in array with multiple line and empty row & col', () => {
+        const data = Executor(
+            file,
+            array()
+                .range('A1', 'I8')
+                .interval(3, 3)
+                .item(
+                    array()
+                        .range('A1', 'B2')
+                        .item(string().point('A1'))
+                ),
+            { sheet: 'Sheet5' }
+        );
+        output(data);
+    });
+
+    it('array in array with after', () => {
+        const data = Executor(
+            file,
+            array()
+                .range('A1', 'F6')
+                .interval(2, 2)
+                .item(
+                    array()
+                        .range('A1', 'B2')
+                        .item(string().point('A1'))
+                )
+                .after(arr => {
+                    return arr.map(_ => _.join('__'));
+                }),
+            { sheet: 'Sheet4' }
+        );
+        output(data);
     });
 });

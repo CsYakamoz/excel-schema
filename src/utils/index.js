@@ -1,12 +1,12 @@
 const R = require('ramda');
-const assert = require('assert');
 
-const LetterList = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
+const UpperLetterList = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
 
 module.exports = {
     pointPattern: /^[a-zA-Z]+(?:[1-9]{1}\d*)$/,
 
     /**
+     * copy a class instance
      * reference: http://es6.ruanyifeng.com/#docs/object
      * @param {object} original
      * @return {object}
@@ -30,14 +30,6 @@ module.exports = {
         const ret = point.match(/^([A-Z]+)(\d+)/);
 
         return { row: parseInt(ret[2]) - 1, col: ret[1] };
-    },
-
-    /**
-     * @param {any} x
-     * @returns {any}
-     */
-    noOperation(x) {
-        return x;
     },
 
     /**
@@ -65,7 +57,7 @@ module.exports = {
 
             return helper(
                 parseInt((n - 1) / 26),
-                LetterList[(n - 1) % 26] + str
+                UpperLetterList[(n - 1) % 26] + str
             );
         };
 
@@ -79,13 +71,13 @@ module.exports = {
      * @returns {string}
      */
     changePoint(additionRow, additionCol, point) {
-        const _ = this.parsePoint(point);
-        const row = _.row + additionRow + 1;
+        const p = this.parsePoint(point);
+        const row = p.row + additionRow + 1;
         const col = R.compose(
             this.numberToExcelTitle,
             R.add(additionCol),
             this.excelTitleToNumber
-        )(_.col);
+        )(p.col);
 
         return `${col}${row}`;
     },
@@ -93,11 +85,10 @@ module.exports = {
     /**
      * @param {string} p1
      * @param {string} p2
-     * @param {object} param2
-     * @param {number} param2.intervalRow
-     * @param {number} param2.intervalCol
+     * @param {number} intervalRow
+     * @param {number} intervalCol
      */
-    calcLengthBtwTwoPoint(p1, p2, { intervalRow = 1, intervalCol = 1 }) {
+    calcLengthBtwTwoPoint(p1, p2, intervalRow, intervalCol) {
         const point1 = this.parsePoint(p1);
         const point2 = this.parsePoint(p2);
 
@@ -110,19 +101,9 @@ module.exports = {
                 ) + 1,
         };
 
-        assert(
-            Number.isInteger(diff.row / intervalRow),
-            `row's length(${
-                diff.row
-            }) is not a multiple of row's interval(${intervalRow})`
-        );
-        assert(
-            Number.isInteger(diff.col / intervalCol),
-            `col's length(${
-                diff.col
-            }) is not a multiple of col's interval(${intervalCol})`
-        );
-
-        return { row: diff.row / intervalRow, col: diff.col / intervalCol };
+        return {
+            row: Math.ceil(diff.row / intervalRow),
+            col: Math.ceil(diff.col / intervalCol),
+        };
     },
 };

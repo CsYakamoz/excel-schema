@@ -5,14 +5,14 @@ const XLSX = require('xlsx');
 const analyzeNode = require('./analyze_node');
 
 /**
- * @typedef {object} ExcelSchemaOption
+ * @typedef {object} ExecutorOption
  * @property {number|string} sheet  sheet's name or sheet's idx(base 0)
  */
 
 /**
  * @param {string} filename
  * @param {any} schema
- * @param {ExcelSchemaOption} [userOption]
+ * @param {ExecutorOption} [userOption]
  * @returns {any}
  */
 module.exports = function Executor(filename, schema, userOption) {
@@ -23,13 +23,12 @@ module.exports = function Executor(filename, schema, userOption) {
     const workbook = XLSX.readFile(filename);
     const sheetName = getSheetName(option.sheet, workbook.SheetNames);
     const sheet = workbook.Sheets[sheetName];
-    const sheetData = XLSX.utils.sheet_to_json(sheet, { header: 'A' });
 
-    return analyzeNode(sheetData, schema);
+    return analyzeNode(sheet, schema);
 };
 
 /**
- * @returns {ExcelSchemaOption}
+ * @returns {ExecutorOption}
  */
 function defaultOption() {
     return { sheet: 0 };

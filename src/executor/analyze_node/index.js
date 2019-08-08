@@ -67,10 +67,10 @@ function builtInType(sheetData, schema, operation) {
 
     const type = typeof schema;
     const dict = {
-        boolean: Utils.noOperation,
-        number: Utils.noOperation,
-        string: Utils.noOperation,
-        symbol: Utils.noOperation,
+        boolean: R.identity,
+        number: R.identity,
+        string: R.identity,
+        symbol: R.identity,
     };
 
     if (dict[type] !== undefined) {
@@ -137,16 +137,12 @@ function analyzeArray(sheetData, schema) {
     const length = Utils.calcLengthBtwTwoPoint(
         schema._range.first,
         schema._range.last,
-        {
-            intervalRow,
-            intervalCol,
-        }
+        intervalRow,
+        intervalCol
     );
 
     const schemaArr = [];
     for (let i = 0; i < length.row; i++) {
-        const arr = [];
-
         for (let j = 0; j < length.col; j++) {
             const updatedSchema = analyzeNode(
                 sheetData,
@@ -157,16 +153,11 @@ function analyzeArray(sheetData, schema) {
                 ])
             );
 
-            arr.push(updatedSchema);
+            schemaArr.push(updatedSchema);
         }
-
-        schemaArr.push(arr);
     }
 
-    const data = analyzeNode(
-        sheetData,
-        length.row === 1 || length.col === 1 ? R.flatten(schemaArr) : schemaArr
-    );
+    const data = analyzeNode(sheetData, schemaArr);
 
     return schema._after !== null ? schema._after(data) : data;
 }

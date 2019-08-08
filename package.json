@@ -1,8 +1,9 @@
 {
   "name": "@csyakamoz/excel-schema",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "read excel in a lazy way",
   "main": "index.js",
+  "types": "./index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CsYakamoz/excel-schema.git"

@@ -1,9 +1,9 @@
 declare type SimpleProcessFunInParserAndAfter = (
     value: any,
-    rawValue: any,
-    point: string
+    rawValue?: any,
+    point?: string
 ) => any;
-declare type SimpleProcessFunInBefore = (rawValue: any, point: string) => any;
+declare type SimpleProcessFunInBefore = (rawValue: any, point?: string) => any;
 declare type ArrayProcessFunInAfter = (value: any[]) => any[];
 
 interface SimpleSchema {
@@ -33,7 +33,9 @@ declare module '@csyakamoz/excel-schema' {
     const Schema: {
         array(): ArraySchema;
         boolean(): SimpleSchema;
-        custom: (parser: SimpleProcessFunInParserAndAfter) => SimpleSchema;
+        custom: (
+            parser: SimpleProcessFunInParserAndAfter
+        ) => () => SimpleSchema;
         date(): SimpleSchema;
         number(): SimpleSchema;
         string(): SimpleSchema;

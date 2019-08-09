@@ -149,7 +149,7 @@ describe('excel-schema', () => {
     it('custom schema', () => {
         const intervalSchema = custom(intervalStr => {
             const pattern = /([([]{1})(\d+),\s*(\d+)([)\]]{1})/;
-            const [, leftBracket, start, end, rightBracket] = intervalStr.match(
+            const [, leftBracket, begin, end, rightBracket] = intervalStr.match(
                 pattern
             );
             const getBoundary = (value, bracket) => {
@@ -161,7 +161,7 @@ describe('excel-schema', () => {
             };
 
             return [
-                getBoundary(start, leftBracket),
+                getBoundary(begin, leftBracket),
                 getBoundary(end, rightBracket),
             ];
         });

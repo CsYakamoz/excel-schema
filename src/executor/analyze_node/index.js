@@ -87,6 +87,11 @@ function builtInType(sheetData, schema, operation) {
 function analyzeArray(sheetData, schema) {
     function updatePointOrRange(additionRow, additionCol, sheetData, schema) {
         if (schema instanceof BaseSchema) {
+            assert(
+                schema._point !== null,
+                'could not call executor without calling point method'
+            );
+
             return Utils.cloneObj(schema).point(
                 Utils.changePoint(additionRow, additionCol, schema._point)
             );

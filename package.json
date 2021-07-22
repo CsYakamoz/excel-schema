@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "ramda": "^0.26.1",
-    "xlsx": "^0.14.3"
+    "xlsx": "^0.17.0"
   },
   "bugs": {
     "url": "https://github.com/CsYakamoz/excel-schema/issues"
